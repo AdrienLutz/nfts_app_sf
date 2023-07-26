@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -40,6 +42,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
+
+    #[ORM\OneToMany(mappedBy: 'useradd', targetEntity: NFT::class)]
+    private Collection $nFTs;
+
+    public function __toString(){
+        return $this->firstname.' '.$this->lastname;
+    }
+
+    public function __construct()
+    {
+        $this->nFTs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -155,6 +169,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, NFT>
+     */
+    public function getNFTs(): Collection
+    {
+        return $this->nFTs;
+    }
+
+    public function addNFT(NFT $nFT): static
+    {
+        if (!$this->nFTs->contains($nFT)) {
+            $this->nFTs->add($nFT);
+            $nFT->setUseradd($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNFT(NFT $nFT): static
+    {
+        if ($this->nFTs->removeElement($nFT)) {
+            // set the owning side to null (unless already changed)
+            if ($nFT->getUseradd() === $this) {
+                $nFT->setUseradd(null);
+            }
+        }
 
         return $this;
     }

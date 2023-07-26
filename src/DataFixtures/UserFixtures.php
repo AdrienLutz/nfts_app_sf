@@ -16,16 +16,16 @@ class UserFixtures extends Fixture
     }
     public function load(ObjectManager $manager): void
     {
-        $testUser = new User();
-        $testUser -> setLastName("user");
-        $testUser -> setFirstName("user");
-        $testUser -> setEmail("user@mail");
-        //        pour rendre la fixture opé même sans la validation par mail
-//        ne fonctionne pas car dfu impossible du fait de contrainte
-//        de clé étangère
-        $testUser->setIsVerified(true);
-        $encodedPassword = $this->hasher->hashPassword($testUser, "user");
-        $testUser -> setPassword("$encodedPassword");
+//        $testUser = new User();
+//        $testUser -> setLastName("user");
+//        $testUser -> setFirstName("user");
+//        $testUser -> setEmail("user@mail");
+//        //        pour rendre la fixture opé même sans la validation par mail
+////        ne fonctionne pas car dfu impossible du fait de contrainte
+////        de clé étangère
+//        $testUser->setIsVerified(true);
+//        $encodedPassword = $this->hasher->hashPassword($testUser, "user");
+//        $testUser -> setPassword("$encodedPassword");
 
         $testAdmin = new User();
         $testAdmin -> setLastName("admin");
@@ -39,7 +39,7 @@ class UserFixtures extends Fixture
 //        de clé étangère
         $testAdmin->setIsVerified(true);
 
-        $manager->persist($testUser);
+//        $manager->persist($testUser);
         $manager->persist($testAdmin);
 
         $manager->flush();
