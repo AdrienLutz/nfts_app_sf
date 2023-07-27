@@ -7,7 +7,7 @@ use App\Form\NftType;
 use App\Form\SearchType;
 use App\Repository\NFTRepository;
 use Doctrine\ORM\EntityManagerInterface;
-//use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -26,8 +26,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class NftController extends AbstractController
 {
     #[Route('/nft', name: 'app_nft')]
-    public function index(NFTRepository $NFTRepository,  Request $request): Response
-//        public function index(NFTRepository $NFTRepository,  Request $request, PaginationInterface $paginator): Response
+//    public function index(NFTRepository $NFTRepository,  Request $request): Response
+        public function index(NFTRepository $NFTRepository,  Request $request, PaginatorInterface $paginator): Response
     {
 //        $nfts = $paginator->paginate(
 //            $NFTRepository -> findAll(),
@@ -36,7 +36,8 @@ class NftController extends AbstractController
 //        );
 
 
-        $nfts = $NFTRepository -> findAll();
+//        $nfts = $NFTRepository -> findAll();
+        $nfts = $NFTRepository ->  findBy(["valeur" => 200], ['valeur' => 'ASC'], 3);
 
         $form = $this->createForm(SearchType::class);
         $form->handleRequest($request);
